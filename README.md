@@ -42,7 +42,7 @@ class HomeViewModel extends ChangeNotifier {
     return _taskRepository.getAllTasks().then((value) {
       _taskList = value;
     }).catchError((error) {
-      // hadle error
+      // handle errors
     }).whenComplete(notifyListeners); // notifiy the data changed
   }
 }
