@@ -53,6 +53,7 @@ class HomeViewModel extends ChangeNotifier {
 class HomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    // injection with riverpod provider
     final viewModel = useProvider(homeViewModelNotifierProvider);
 
     useEffect(() {
