@@ -4,6 +4,7 @@ import 'package:todo_app/infra/database_provider.dart';
 import 'package:todo_app/infra/model/task.dart';
 import 'package:todo_app/infra/repository/task_repository.dart';
 
+// テスタビリティ保持のため直接参照持たせるのではなくabstract classの方を間接的に型として参照する
 final taskRepositoryProvider = Provider<TaskRepository>((ref) => TaskRepositoryImpl());
 
 class TaskRepositoryImpl implements TaskRepository {
