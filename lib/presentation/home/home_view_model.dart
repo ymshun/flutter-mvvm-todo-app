@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app/infra/model/task.dart';
 import 'package:todo_app/infra/repository/task_repository.dart';
@@ -24,15 +23,29 @@ class HomeViewModel extends ChangeNotifier {
       _taskList = value;
       debugPrint("succeeded fetch: $_taskList");
     }).catchError((error) {
+      Fluttertoast.showToast(msg: 'エラーが発生しました');
       debugPrint('failed to fetch task list: ${error.toString()}');
     }).whenComplete(notifyListeners);
   }
 
   /// タスクのcompleted update
-  void onCompletedTask(int index, bool isCompleted) {
+  Future<void> onCompletedTask(int index, bool isCompleted) {
     Task updatedTask = _taskList![index].copyWith(completed: isCompleted ? 1 : 0);
-    _taskRepository.updateTask(updatedTask).catchError((error) {}).whenComplete(() {
+    return _taskRepository.updateTask(updatedTask).catchError((error) {
+      Fluttertoast.showToast(msg: 'エラーが発生しました');
+      debugPrint('failed to update task: ${error.toString()}');
+    }).whenComplete(() {
       _taskList![index] = updatedTask;
+      notifyListeners();
+    });
+  }
+
+  Future<void> deleteTask(int index) {
+    return _taskRepository.deleteTask(_taskList![index].id!).catchError((error) {
+      Fluttertoast.showToast(msg: 'エラーが発生しました');
+      debugPrint('failed to delete task: ${error.toString()}');
+    }).whenComplete(() {
+      _taskList!.removeAt(index);
       notifyListeners();
     });
   }
